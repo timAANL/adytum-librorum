@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Adytum Librorum | Sacred Nature Library</title>
+    <style>
+        :root {
+            --kayu-gelap: #1b110e; --kayu-medium: #3e2723; --daun: #2e7d32; 
+            --pasir: #fdfaf1; --sage: #81c784; --putih-kaca: rgba(255, 255, 255, 0.15);
+        }
+        body { 
+    margin: 0; font-family: 'Georgia', serif; 
+    /* Menggabungkan Gradasi Bergerak + Gambar Perpus Transparan */
+    background: linear-gradient(rgba(27, 40, 24, 0.8), rgba(62, 39, 35, 0.8)), 
+                url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1000'); 
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    animation: gradientBG 15s ease infinite;
+    color: var(--pasir); min-height: 100vh;
+}
+        }
+        @keyframes gradientBG { 0% {background-position:0% 50%} 50% {background-position:100% 50%} 100% {background-position:0% 50%} }
+
+        header { background: rgba(27, 17, 14, 0.95); padding: 30px; text-align: center; border-bottom: 5px solid var(--sage); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 2.2em; letter-spacing: 6px; text-shadow: 0 0 15px var(--sage); margin: 0; }
+        
+        nav { margin-top: 20px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        nav a { color: white; text-decoration: none; padding: 8px 12px; border: 1px solid var(--sage); border-radius: 20px; font-size: 0.75em; cursor: pointer; transition: 0.3s; }
+        nav a:hover { background: var(--sage); color: var(--kayu-medium); transform: scale(1.1); }
+
+        .section { display: none; max-width: 1000px; margin: 40px auto; padding: 40px; background: var(--putih-kaca); backdrop-filter: blur(12px); border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); animation: fadeInUp 0.6s ease; }
+        .active { display: block; }
+        @keyframes fadeInUp { from {opacity:0; transform:translateY(30px)} to {opacity:1; transform:translateY(0)} }
+
+        h2 { color: var(--sage); border-bottom: 2px solid var(--sage); padding-bottom: 10px; text-align: center; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: rgba(0,0,0,0.4); padding: 20px; border-radius: 15px; border-top: 4px solid var(--sage); }
+
+        /* KOLEKSI CANGGIH */
+        .filter-btn { padding: 10px 20px; background: none; border: 1px solid var(--sage); color: white; border-radius: 10px; cursor: pointer; margin: 5px; transition: 0.3s; }
+        .filter-btn.active-btn { background: var(--sage); color: var(--kayu-medium); }
+        .collection-list { margin-top: 20px; }
+
+        /* TABEL LAYANAN */
+        table { width: 100%; border-collapse: collapse; background: rgba(0,0,0,0.2); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+        th { background: var(--sage); color: var(--kayu-medium); padding: 12px; }
+        td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
+
+        /* FOOTER */
+        .pembatas { height: 10px; background: linear-gradient(to right, transparent, var(--sage), transparent); margin-top: 100px; }
+        footer { background: var(--kayu-gelap); color: #8d6e63; padding: 40px; text-align: center; border-top: 2px solid var(--kayu-medium); }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); }
+        .modal-content { background: var(--pasir); color: var(--kayu-medium); margin: 10% auto; padding: 40px; width: 40%; border-radius: 25px; position: relative; }
+        .close { position: absolute; right: 25px; top: 15px; font-size: 30px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 class="logo" style="display: flex !important; flex-direction: row !important; align-items: center; justify-content: center; gap: 15px; margin: 0;">
+    <img src="logo adytum.jpeg" alt="Logo" style="height: 55px; width: auto; flex-shrink: 0; filter: drop-shadow(0 0 5px var(--sage));">
+    <span style="white-space: nowrap;">ADYTUM LIBRORUM</span>
+</h1>
+
+    <nav>
+        <a onclick="show('home')">HOME</a>
+        <a onclick="show('profil')">PROFIL PERPUSTAKAAN</a>
+        <a onclick="show('opac')">KATALOG ONLINE (OPAC)</a>
+        <a onclick="show('layanan')">LAYANAN</a>
+        <a onclick="show('koleksi')">KOLEKSI</a>
+        <a onclick="show('faq')">PANDUAN/FAQ</a>
+        <a onclick="show('agenda')">AGENDA/KEGIATAN</a>
+		<a onclick="show('berita')">BERITA & PENGUMUMAN</a>
+        <a onclick="show('kontak')">KONTAK</a>
+    </nav>
+</header>
+
+<div class="container">
+   <!-- HOME -->
+<section id="home" class="section active" style="padding: 40px 20px; text-align: center;">
+    <h2 style="color: var(--sage); margin-bottom: 25px; font-size: 2.5rem;">Selamat Datang di Adytum Librorum</h2>
+    
+    <!-- Gambar -->
+    <div style="width: 100%; max-width: 900px; height: 400px; border-radius: 20px; overflow: hidden; margin: 0 auto 30px; border: 3px solid var(--sage); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <img src="perpustakaan.jpg" alt="Interior Perpustakaan Modern" style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
+
+    <!-- Deskripsi -->
+    <div style="max-width: 800px; margin: 0 auto;">
+        <p style="line-height: 1.8; font-size: 1.1rem; color: #ddd; font-style: italic;">
+            Adytum Librorum hadir sebagai perpustakaan digital modern yang menghubungkan pengetahuan, teknologi, dan kreativitas dalam satu ruang informasi yang elegan. Di tengah perkembangan AI dan transformasi digital, perpustakaan kini berkembang menjadi pusat literasi interaktif, dibuktikan dengan berbagai seminar dan inovasi AI literacy yang mulai diterapkan di berbagai perpustakaan Indonesia. 
+        </p>
+        <p style="margin-top: 20px; line-height: 1.8; font-size: 1.1rem; color: var(--sage); font-weight: bold;">
+            Temukan berita terbaru, agenda literasi, dan akses pengetahuan tanpa batas dalam pengalaman belajar yang lebih modern dan inspiratif.
+        </p>
+    </div>
+</section>
+
+    <!-- PROFIL -->
+    <section id="profil" class="section">
+    <div class="container" style="padding: 40px 20px; color: white;">
+        
+        <!-- Tentang Kami -->
+        <div class="tentang-kami" style="margin-bottom: 40px; text-align: justify; border-bottom: 1px solid var(--sage); padding-bottom: 20px;">
+            <h2 style="color: var(--sage); border-left: 5px solid var(--sage); padding-left: 15px; margin-bottom: 20px;">Tentang Kami</h2>
+            <p style="margin-bottom: 15px; line-height: 1.8;">Adytum Librorum didirikan oleh <strong>Tim AANL</strong> dengan misi menghidupkan kembali literasi klasik di tengah kemajuan era digital. Berawal dari keprihatinan kami terhadap koleksi sejarah yang mulai terlupakan, kami memutuskan untuk mengalihfungsikan sebuah gedung kolonial di jantung Kota Lama Semarang menjadi perpustakaan modern yang inklusif.</p>
+            <p style="line-height: 1.8;">Kami percaya bahwa keaslian masa lalu tidak harus hilang ditelan zaman. Oleh karena itu, Adytum Librorum memadukan arsitektur klasik yang autentik dengan sistem manajemen informasi berbasis teknologi terkini. Melalui tangan dingin <strong>Tim AANL</strong>, perpustakaan ini kini hadir sebagai ruang ketiga yang hangat—tempat di mana setiap orang dapat mengakses data riset global, belajar bahasa asing, hingga mendalami literasi melalui layanan yang ramah disabilitas.</p>
+        </div>
+
+        <!-- Visi & Misi -->
+        <div class="visi-misi" style="margin-bottom: 50px;">
+            <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; border: 1px solid var(--sage); margin-bottom: 20px;">
+                <h3 style="color: var(--sage); margin-bottom: 10px;">Visi</h3>
+                <p style="font-style: italic;">"Menjadi ruang suci literasi yang menghidupkan kembali kebijaksanaan masa lalu melalui inovasi teknologi masa depan demi masyarakat yang cerdas dan inklusif."</p>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; border: 1px solid var(--sage);">
+                <h3 style="color: var(--sage); margin-bottom: 15px;">Misi</h3>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div><strong>1.</strong> Mendorong Inklusivitas Literasi</div>
+                    <div><strong>2.</strong> Mengintegrasikan Teknologi Cerdas</div>
+                    <div><strong>3.</strong> Menerapkan sistem manajemen data dan kecerdasan buatan untuk merawat koleksi klasik serta mempercepat akses riset global bagi pemustaka.</div>
+                    <div><strong>4.</strong> Membangun Komunitas Global yang Berakar Lokal</div>
+                    <div><strong>5.</strong> Menjadikan perpustakaan sebagai pusat pertukaran budaya dan bahasa asing yang tetap menjaga nilai-nilai keaslian sejarah di kawasan Kota Lama Semarang.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Struktur Organisasi -->
+        <div class="struktur" style="text-align: center;">
+            <h2 style="color: var(--sage); margin-bottom: 40px;">Struktur Organisasi</h2>
+            
+            <!-- Kepala Perpustakaan -->
+            <div style="margin-bottom: 30px;">
+                <div style="display: inline-block; padding: 15px 25px; border: 2px solid var(--sage); border-radius: 10px; background: rgba(0,0,0,0.3);">
+                    <strong>Kepala Perpustakaan</strong><br>
+                    Alaina Chilya
+                </div>
+            </div>
+
+            <!-- Garis Penghubung -->
+            <div style="width: 2px; height: 30px; background: var(--sage); margin: 0 auto;"></div>
+            <div style="width: 80%; height: 2px; background: var(--sage); margin: 0 auto;"></div>
+            <div style="display: flex; justify-content: space-between; width: 80%; margin: 0 auto 30px;">
+                <div style="width: 2px; height: 30px; background: var(--sage);"></div>
+                <div style="width: 2px; height: 30px; background: var(--sage);"></div>
+                <div style="width: 2px; height: 30px; background: var(--sage);"></div>
+            </div>
+
+            <!-- Staf -->
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 200px; padding: 15px; border: 1px solid var(--sage); border-radius: 10px; background: rgba(0,0,0,0.2);">
+                    <strong>Staf Pengolahan</strong><br>
+                    Ayumi Nastasya
+                </div>
+                <div style="flex: 1; min-width: 200px; padding: 15px; border: 1px solid var(--sage); border-radius: 10px; background: rgba(0,0,0,0.2);">
+                    <strong>Staf Sirkulasi</strong><br>
+                    Nailan Farah
+                </div>
+                <div style="flex: 1; min-width: 200px; padding: 15px; border: 1px solid var(--sage); border-radius: 10px; background: rgba(0,0,0,0.2);">
+                    <strong>Staf Digital</strong><br>
+                    Laeli Rahmalia
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- OPAC -->
+    <section id="opac" class="section">
+    <h2>Katalog Online (OPAC)</h2>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <input type="text" id="searchInput" onkeyup="searchBook()" placeholder="Ketik judul buku, lalu tekan enter.." style="width: 80%; padding: 15px; border-radius: 30px; border:none;">
+    </div>
+    <div id="bookList">
+        <div class="card book-card" onclick="openModal('Babad Tanah Jawa', 'R. Ng. Yasadipura', '5', 'Tersedia')" style="cursor:pointer; margin-bottom:10px;">
+            📖 Babad Tanah Jawa <span style="float:right;">Lihat Detail</span>
+        </div>
+        <div class="card book-card" onclick="openModal('Kuda Lumping Temanggung', 'Arsip Adytum', '1', 'Tersedia')" style="cursor:pointer;">
+            📖 Gerakan Arsip Hidup: Kuda Lumping <span style="float:right;">Lihat Detail</span>
+        </div>
+		<div class="card book-card" onclick="openModal('Transformasi Diri', 'Heru K. Wibawa', '2', 'Dipinjam')" style="cursor:pointer;">
+            📖 Transformasi Diri <span style="float:right;">Lihat Detail</span>
+        </div>
+		<div class="card book-card" onclick="openModal('Think and Grow Rich', 'Napoleon Hill', '1', 'Tersedia')" style="cursor:pointer;">
+            📖 Think and Grow Rich <span style="float:right;">Lihat Detail</span>
+        </div>
+		<div class="card book-card" onclick="openModal('Cara Tumbuhan Mengendalikan Manusia', 'Michael Pollan', '1', 'Tersedia')" style="cursor:pointer;">
+            📖 The Botany of Desire: Cara Tumbuhan Mengendalikan Manusia <span style="float:right;">Lihat Detail</span>
+        </div>
+		<div class="card book-card" onclick="openModal('Fungsi, Struktur, dan Representasi', 'Jandy Luik, Ph.D.', '0', 'Dipinjam')" style="cursor:pointer;">
+            📖 Startup Accelerator dan Industri Media: Fungsi, Struktur, dan Representasi <span style="float:right;">Lihat Detail</span>
+        </div>
+		<div class="card book-card" onclick="openModal('Seni Menyederhanakan Hidup', 'Shunmyo Masuno', '3', 'Tersedia')" style="cursor:pointer;">
+            📖 Seni Menyederhanakan Hidup <span style="float:right;">Lihat Detail</span>
+        </div>
+		<div class="card book-card" onclick="openModal('Titik Nadir (Breaking Point)', 'Pamela Clare', '1', 'Tersedia')" style="cursor:pointer;">
+            📖 Titik Nadir (Breaking Point) <span style="float:right;">Lihat Detail</span>
+        </div>
+		<div class="card book-card" onclick="openModal('These Things Hidden-Segala yang Tersembunyi', 'Heather Gudenkauf', '2', 'Tersedia')" style="cursor:pointer;">
+            📖 These Things Hidden-Segala yang Tersembunyi <span style="float:right;">Lihat Detail</span>
+        </div>
+		<div class="card book-card" onclick="openModal('Tempat Paling Sunyi', 'Arafat Nur', '1', 'Dipinjam')" style="cursor:pointer;">
+            📖 Tempat Paling Sunyi <span style="float:right;">Lihat Detail</span>
+        </div>
+		<div class="card book-card" onclick="openModal('Summer Triangle', 'Hara Hope', '1', 'Tersedia')" style="cursor:pointer;">
+            📖 Summer Triangle <span style="float:right;">Lihat Detail</span>
+        </div>
+		<div class="card book-card" onclick="openModal('Seribu Tahun Cahaya', 'Lia Heliana', '2', 'Dipinjam')" style="cursor:pointer;">
+            📖 Seribu Tahun Cahaya <span style="float:right;">Lihat Detail</span>
+        </div>
+    </div>
+</section>
+<script>
+function searchBook() {
+    let input = document.getElementById('searchInput').value.toLowerCase();
+    let cards = document.getElementsByClassName('book-card');
+    for (let i = 0; i < cards.length; i++) {
+        if (cards[i].innerText.toLowerCase().includes(input)) {
+            cards[i].style.display = "";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+</script>
+
+    <!-- LAYANAN -->
+    <section id="layanan" class="section">
+        <h2>Layanan Kami</h2>
+        <h3>1. Layanan Sirkulasi</h3>
+        <table>
+            <tr><th>Jenis</th><th>Durasi</th><th>Ketentuan</th></tr>
+            <tr><td>Peminjaman Buku Fisik</td><td>7 Hari</td><td>Maks 2 Buku</td></tr>
+        </table>
+		<table>
+            <tr><th>Jenis</th><th>Durasi</th><th>Ketentuan</th></tr>
+            <tr><td>Peminjaman e-Book</td><td>7 Hari</td><td>Maks 2 Buku</td></tr>
+        </table>
+		<table>
+            <tr><th>Jenis</th><th>Durasi</th><th>Ketentuan</th></tr>
+            <tr><td>Peminjaman Buku Premium</td><td>14 Hari</td><td>Maks 3 Buku</td></tr>
+        </table>
+        <h3>2. Layanan Ruang</h3>
+        <table>
+            <tr><th>Ruangan</th><th>Kapasitas</th><th>Fasilitas</th></tr>
+            <tr><td>Lobby Utama</td><td>20 Orang</td><td>Wi-Fi & AC</td></tr>
+            <tr><td>Taman Baca</td><td>15 Orang</td><td>Nuansa Alam</td></tr>
+			<tr><td>Ruang Diskusi Kreatif</td><td>10 Orang</td><td>Smart TV, Wi-Fi, AC, & Papan Digital</td></tr>
+        </table>
+        <h3>3. Layanan Digital</h3>
+        <table>
+            <tr><th>Layanan</th><th>Akses</th><th>Biaya</th></tr>
+            <tr><td>E-Journal</td><td>Member Only</td><td>Gratis</td></tr>
+            <tr><td>Scan Dokumen</td><td>On-site</td><td>Gratis</td></tr>
+			<tr><td>Pusat Arsip Digital</td><td>Premium Members</td><td>Rp10.000/Bulan</td></tr>
+        </table>
+		<h3>4. Layanan Referensi</h3>
+        <table>
+            <tr><th>Jenis Layanan</th><th>Metode</th><th>Ketentuan</th></tr>
+            <tr><td>Konsultasi Penelusuran Informasi</td><td>On-site & Chat</td><td>Bantuan pencarian data riset/skripsi</td></tr>
+            <tr><td>Akses Koleksi Khusus</td><td>Baca di Tempat</td><td>Jurnal fisik & naskah sejarah Kota Lama</td></tr>
+            <tr><td>Literasi Informasi & AI</td><td>Workshop</td><td>Pendampingan penggunaan alat bantu digital</td></tr>
+        </table>
+        
+        <div style="margin-top: 15px; background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; border: 1px solid var(--sage);">
+            <p style="font-size: 0.9rem; font-style: italic; color: #bbb;">
+                <strong>Catatan Layanan Referensi:</strong> Koleksi referensi (Skripsi, Jurnal, dan Kamus) tidak dapat dipinjam untuk dibawa pulang demi menjaga keamanan data dan fisik dokumen sejarah.
+            </p>
+        </div>
+    </section>
+
+    <!-- KOLEKSI -->
+<section id="koleksi" class="section">
+    <h2 style="color: var(--sage); margin-bottom: 20px;">Koleksi Perpustakaan</h2>
+    
+    <div style="text-align: center; margin-bottom:25px;">
+        <button class="filter-btn active-btn" onclick="filterCol('all', event)">Semua</button>
+        <button class="filter-btn" onclick="filterCol('jurnal', event)">Jurnal</button>
+        <button class="filter-btn" onclick="filterCol('skripsi', event)">Skripsi</button>
+        <button class="filter-btn" onclick="filterCol('ebook', event)">E-Book</button>
+    </div>
+
+    <div id="colList" style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- JURNAL -->
+        <div class="card item jurnal" onclick="showDetail('Jurnal: Implementasi Metadata Digital', '2026', 'Tersedia')">📄 Jurnal: Implementasi Metadata Digital (2026)</div>
+        <div class="card item jurnal" onclick="showDetail('Jurnal: Rancang Bangun Marketplace Berbasis Website', '2021', 'Tersedia')">📄 Jurnal: Rancang Bangun Marketplace Berbasis Website menggunakan Metodologi Systems Development Life Cycle (SDLC) dengan Model Waterfall (2021)</div>
+        <div class="card item jurnal" onclick="showDetail('Jurnal: Qualitative method concepts', '2024', 'Tersedia')">📄 Jurnal: Qualitative method concepts: Literature review, focus group discussion, ethnography and grounded theory (2024)</div>
+        <div class="card item jurnal" onclick="showDetail('Jurnal: The consequences of sleep deprivation', '2023', 'Tersedia')">📄 Jurnal: The consequences of sleep deprivation on cognitive performance (2023)</div>
+        <div class="card item jurnal" onclick="showDetail('Jurnal: Analysing the role of ChatGPT', '2023', 'Tersedia')">📄 Jurnal: Analysing the role of ChatGPT in improving student productivity in higher education (2023)</div>
+        <div class="card item jurnal" onclick="showDetail('Jurnal: Pengaruh kompensasi, lingkungan kerja', '2022', 'Tersedia')">📄 Jurnal: Pengaruh kompensasi, lingkungan kerja dan beban kerja terhadap kepuasan kerja karyawan (2022)</div>
+
+        <!-- SKRIPSI -->
+        <div class="card item skripsi" onclick="showDetail('Skripsi: Pola Baca Mahasiswa Undip', '2025', 'Tersedia')">🎓 Skripsi: Pola Baca Mahasiswa Undip (2025)</div>
+        <div class="card item skripsi" onclick="showDetail('Skripsi: Pemanfaatan Koleksi Digital', '2023', 'Tersedia')">🎓 Skripsi: Pemanfaatan Koleksi Digital dalam Memenuhi Kebutuhan Informasi Mahasiswa D3 Ilmu Perpustakaan Universitas Lampung (2023)</div>
+        <div class="card item skripsi" onclick="showDetail('Skripsi: Penerapan Sistem Otomasi Perpustakaan Berbasis AI', '2025', 'Tersedia')">🎓 Skripsi: Penerapan Sistem Otomasi Perpustakaan Berbasis Artificial Intelligence (AI) dalam Meningkatkan Efektivitas Penemuan Kembali Informasi (2025)</div>
+        <div class="card item skripsi" onclick="showDetail('Skripsi: Kinerja Pustakawan', '2024', 'Tersedia')">🎓 Skripsi: Kinerja Pustakawan dalam Meningkatkan Layanan Pengguna (Studi pada Perpustakaan Pusat Universitas Brawijaya) (2024)</div>
+        <div class="card item skripsi" onclick="showDetail('Skripsi: Analisis Psikologi Warna Abu-Abu', '2025', 'Tersedia')">🎓 Skripsi: Analisis Psikologi Warna Abu-Abu dalam Jurnal Harian sebagai Media Katarsis Emosi Mahasiswa (2025)</div>
+        <div class="card item skripsi" onclick="showDetail('Skripsi: Implementasi Algoritma Machine Learning', '2026', 'Tersedia')">🎓 Skripsi: Implementasi Algoritma Machine Learning untuk Prediksi Tren Penggunaan Bahasa Gaul di Media Sosial Mahasiswa (2026)</div>
+
+        <!-- E-BOOK -->
+        <div class="card item ebook" onclick="showDetail('E-Book: Arsitektur Perpustakaan Modern', '2023', 'Tersedia')">📱 E-Book: Arsitektur Perpustakaan Modern (2023)</div>
+        <div class="card item ebook" onclick="showDetail('E-Book: Dialektika seni, kekuasaan, dan pendidikan', '2022', 'Tersedia')">📱 E-Book: Dialektika seni, kekuasaan, dan pendidikan (2022)</div>
+        <div class="card item ebook" onclick="showDetail('E-Book: The Story of Oriental Philosophy', '2021', 'Tersedia')">📱 E-Book: The Story of Oriental Philosophy: Sejarah Filsafat Timur (2021)</div>
+        <div class="card item ebook" onclick="showDetail('E-Book: MSDM : Manajemen Sumber Daya Manusia', '2020', 'Tersedia')">📱 E-Book: MSDM : Manajemen Sumber Daya Manusia (2020)</div>
+        <div class="card item ebook" onclick="showDetail('E-Book: Pustakawan Profesional di Era Digital', '2017', 'Tersedia')">📱 E-Book: Pustakawan Profesional di Era Digital (2017)</div>
+        <div class="card item ebook" onclick="showDetail('E-Book: Mekanisme Judicial Review', '2015', 'Tersedia')">📱 E-Book: Mekanisme Judicial Review (2015)</div>
+    </div>
+</section>
+
+<!-- MODAL BOX -->
+<div id="modalDetail" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:99999; align-items:center; justify-content:center;">
+    <div style="background:#1a1a1a; padding:30px; border-radius:15px; border:2px solid var(--sage); max-width:450px; width:90%; color:white;">
+        <h3 id="m-title" style="color:var(--sage); margin-bottom:15px; text-align:center;"></h3>
+        <p><strong>Tahun:</strong> <span id="m-year"></span></p>
+        <p><strong>Status:</strong> <span id="m-status" style="color:#00ff00;"></span></p>
+        
+        <div style="margin-top:25px; display:flex; gap:10px; justify-content:center;">
+            <button onclick="alert('Permintaan terkirim!'); document.getElementById('modalDetail').style.display='none';" style="background:var(--sage); color:black; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-weight:bold;">Pinjam / Akses</button>
+            
+            <!-- Tutup -->
+            <button onclick="document.getElementById('modalDetail').style.display='none'" style="background:#444; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Fungsi munculin modal 
+function showDetail(title, year, status) {
+    const modal = document.getElementById('modalDetail');
+    document.getElementById('m-title').innerText = title;
+    document.getElementById('m-year').innerText = year;
+    document.getElementById('m-status').innerText = status;
+    modal.style.display = "flex";
+}
+
+// Fungsi Filter
+function filterCol(cat, e) {
+    let items = document.getElementsByClassName('item');
+    let btns = document.getElementsByClassName('filter-btn');
+    for (let btn of btns) btn.classList.remove('active-btn');
+    if(e) e.currentTarget.classList.add('active-btn');
+
+    for (let item of items) {
+        if (cat === 'all') item.style.display = "block";
+        else if (item.classList.contains(cat)) item.style.display = "block";
+        else item.style.display = "none";
+    }
+}
+</script>
+
+    <!-- PANDUAN/FAQ -->
+    <section id="faq" class="section">
+    <div class="container" style="padding: 40px 20px; color: white;">
+        
+        <!-- 1. Panduan Cara Menggunakan OPAC -->
+        <div class="faq-card" style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; border: 1px solid var(--sage); margin-bottom: 30px;">
+            <h2 style="color: var(--sage); margin-bottom: 20px; border-left: 5px solid var(--sage); padding-left: 15px;">Panduan Cara Menggunakan OPAC</h2>
+            <div style="display: flex; flex-direction: column; gap: 12px; line-height: 1.6;">
+                <div><strong>1.</strong> Buka menu Katalog Online (OPAC).</div>
+                <div><strong>2.</strong> Ketik judul buku, penulis, atau kata kunci pada kolom pencarian.</div>
+                <div><strong>3.</strong> Pilih buku yang dicari untuk melihat detail dan ketersediaan.</div>
+                <div><strong>4.</strong> Catat nomor panggil buku lalu cari di rak sesuai lokasi.</div>
+            </div>
+        </div>
+
+        <!-- 2. Syarat & Ketentuan Peminjaman Buku -->
+        <div class="faq-card" style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; border: 1px solid var(--sage); margin-bottom: 30px;">
+            <h2 style="color: var(--sage); margin-bottom: 20px; border-left: 5px solid var(--sage); padding-left: 15px;">Syarat & Ketentuan Peminjaman Buku</h2>
+            <ul style="list-style-type: square; padding-left: 20px; line-height: 1.8;">
+                <li>Wajib menunjukkan KTM/Kartu Anggota.</li>
+                <li>Maksimal peminjaman 2 buku selama 7 hari.</li>
+                <li>Buku referensi/jurnal hanya dibaca di tempat.</li>
+                <li>Keterlambatan pengembalian dikenakan sanksi sesuai aturan perpustakaan.</li>
+                <li>Buku yang rusak atau hilang wajib diganti.</li>
+            </ul>
+        </div>
+
+        <!-- 3. FAQ Layanan Perpustakaan -->
+        <div class="faq-card" style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; border: 1px solid var(--sage);">
+            <h2 style="color: var(--sage); margin-bottom: 25px; border-left: 5px solid var(--sage); padding-left: 15px;">FAQ Layanan Perpustakaan</h2>
+            
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- FAQ -->
+                <div>
+                    <p style="color: var(--sage); font-weight: bold; margin-bottom: 5px;">Q: Bagaimana cara menjadi anggota?</p>
+                    <p style="color: #ddd; padding-left: 20px;">A: Datang ke admin perpustakaan dengan membawa KTM.</p>
+                </div>
+                
+                <div>
+                    <p style="color: var(--sage); font-weight: bold; margin-bottom: 5px;">Q: Apakah bisa memperpanjang masa pinjam?</p>
+                    <p style="color: #ddd; padding-left: 20px;">A: Bisa, selama buku tidak sedang dipesan pengguna lain.</p>
+                </div>
+
+                <div>
+                    <p style="color: var(--sage); font-weight: bold; margin-bottom: 5px;">Q: Apakah jurnal bisa dipinjam?</p>
+                    <p style="color: #ddd; padding-left: 20px;">A: Tidak, jurnal hanya untuk dibaca di tempat atau akses digital.</p>
+                </div>
+
+                <div>
+                    <p style="color: var(--sage); font-weight: bold; margin-bottom: 5px;">Q: Bagaimana jika buku terlambat dikembalikan?</p>
+                    <p style="color: #ddd; padding-left: 20px;">A: Akan dikenakan denda/sanksi sesuai peraturan.</p>
+                </div>
+
+                <div>
+                    <p style="color: var(--sage); font-weight: bold; margin-bottom: 5px;">Q: Apakah tersedia akses WiFi?</p>
+                    <p style="color: #ddd; padding-left: 20px;">A: Ya, WiFi tersedia untuk pengunjung perpustakaan.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+    <!-- AGENDA -->
+    <section id="agenda" class="section">
+        <h2>Agenda/Kegiatan</h2>
+        <div class="grid-3">
+            <div class="card">📅 <strong>10 Juni 2026</strong><br>Workshop Digitalisasi Naskah Kuno & Metadata</div>
+            <div class="card">📅 <strong>04 Agustus 2026</strong><br>Night at the Library: VR Journey Permainan Tradisional</div>
+            <div class="card">📅 <strong>Friday at Adytum</strong><br>Jum'at Inklusif: Kelas Bahasa Isyarat & Literasi Aksesibel</div>
+        </div>
+    </section>
+	
+	<!-- BERITA/PENGUMUMAN -->
+	<section id="berita" class="section">
+    <h2>Berita/Pengumuman</h2>
+    <div class="grid-3">
+        <!-- Berita 1 -->
+        <div class="card">
+            <img src="braile.jfif" style="width:100%; border-radius:10px; margin-bottom:10px;">
+            <h4> Peresmian "Layanan Inklusif: Pojok Isyarat & Literasi Disabilitas"</h4>
+            <p style="font-size:0.8em;">Adytum Librorum resmi meluncurkan area khusus yang menyediakan koleksi buku braille digital dan perangkat lunak sensorik untuk pemustaka disabilitas. Langkah ini menjadikan perpustakaan kita sebagai pionir ruang publik yang aksesibel bagi semua kalangan di Semarang.</p>
+        </div>
+        <!-- Berita 2 -->
+        <div class="card">
+            <img src="tablet.jfif" style="width:100%; border-radius:10px; margin-bottom:10px;">
+            <h4>Adopsi Teknologi "Smart AI Librarian" untuk Riset Global</h4>
+            <p style="font-size:0.8em;">Kini pemustaka dapat menggunakan fasilitas asisten virtual berbasis kecerdasan buatan (AI) untuk membantu pencarian referensi dalam berbagai bahasa asing secara instan. Layanan ini mempermudah mahasiswa dalam menyusun jurnal internasional dengan akurasi data yang tinggi.</p>
+        </div>
+        <!-- Berita 3 -->
+        <div class="card">
+            <img src="baca buku melingkar.jpeg" style="width:100%; border-radius:10px; margin-bottom:10px;">
+            <h4> Program "Friday Language Circle" Resmi Dibuka</h4>
+            <p style="font-size:0.8em;"> Mulai bulan ini, setiap hari Jum'at sore akan diadakan sesi diskusi santai menggunakan bahasa asing yang terbuka untuk umum. Program ini bertujuan membangun komunitas global di Semarang agar pemustaka lebih percaya diri dalam berkomunikasi di tingkat internasional.</p>
+        </div>
+    </div>
+</section>
+
+    <!-- KONTAK -->
+    <section id="kontak" class="section">
+    <h2>Kontak & Lokasi</h2>
+    <div class="grid-3">
+        <div class="card">📍 <strong>Alamat</strong><br>Tanjung Mas, Area Kota Lama, Kota Semarang</div>
+        <div class="card">📞 <strong>Telepon</strong><br>(024) 76480619</div>
+        <div class="card">✉️ <strong>Email</strong><br>audytumlibrorum@gmail.com</div>
+    </div>
+    <!-- Bagian Maps Kota Lama Semarang -->
+<div style="margin-top: 20px; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+    <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.316828590653!2d110.4265431742469!3d-6.971842868265426!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e70f3547d2518e9%3A0x6b4020a6e0c70e2!2sGereja%20Blenduk!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid" 
+        width="100%" 
+        height="350" 
+        style="border:0;" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+</div>
+</section>
+</div>
+
+<div class="pembatas"></div>
+
+<footer>
+    <p>&copy; 2026 Adytum Librorum - Managed by Tim AANL</p>
+    <p>Diponegoro University | Library & Information Science</p>
+</footer>
+
+<div id="bookModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <hr>
+        <p><strong>Pengarang:</strong> <span id="modalAuthor"></span></p>
+        <p><strong>Jumlah Eksemplar:</strong> <span id="modalStock"></span></p>
+        <p><strong>Status:</strong> <span id="modalStatus" style="color:green; font-weight:bold;"></span></p>
+    </div>
+</div>
+
+<script>
+    function show(id) {
+        var s = document.getElementsByClassName('section');
+        for (var i=0; i<s.length; i++) s[i].classList.remove('active');
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
+    }
+    function openModal(t, a, st, s) {
+        document.getElementById('modalTitle').innerText = t;
+        document.getElementById('modalAuthor').innerText = a;
+        document.getElementById('modalStock').innerText = st;
+        document.getElementById('modalStatus').innerText = s;
+        document.getElementById('bookModal').style.display = "block";
+    }
+    function closeModal() { document.getElementById('bookModal').style.display = "none"; }
+</script>
+</body>
+</html>
